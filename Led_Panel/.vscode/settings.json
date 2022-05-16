@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "rcvdata.h": "c",
+        "functional": "cpp"
+    }
+}
