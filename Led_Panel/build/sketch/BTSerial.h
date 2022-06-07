@@ -1,4 +1,4 @@
-#line 1 "d:\\Project\\LedPanel\\Led_Panel\\BTSerial.h"
+#line 1 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\BTSerial.h"
 #include "BluetoothSerial.h"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)

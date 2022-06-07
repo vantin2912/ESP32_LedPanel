@@ -10,27 +10,27 @@
     "Includepath": "C:\\Users\\vanti\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.3\\variants\\doitESP32devkitV1"
   },
   {
-    "Sourcefile": "d:\\Project\\LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
+    "Sourcefile": "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
     "Include": "BluetoothSerial.h",
     "Includepath": "C:\\Users\\vanti\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.3\\libraries\\BluetoothSerial\\src"
   },
   {
-    "Sourcefile": "d:\\Project\\LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
+    "Sourcefile": "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
     "Include": "DMD32.h",
     "Includepath": "C:\\Users\\vanti\\OneDrive\\Documents\\Arduino\\libraries\\DMD32"
   },
   {
-    "Sourcefile": "d:\\Project\\LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
+    "Sourcefile": "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
     "Include": "SPI.h",
     "Includepath": "C:\\Users\\vanti\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.3\\libraries\\SPI\\src"
   },
   {
-    "Sourcefile": "d:\\Project\\LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
+    "Sourcefile": "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\build\\sketch\\Led_Panel.ino.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "d:\\Project\\LedPanel\\Led_Panel\\build\\sketch\\BTSerial.cpp",
+    "Sourcefile": "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\build\\sketch\\BTSerial.cpp",
     "Include": "",
     "Includepath": null
   },
