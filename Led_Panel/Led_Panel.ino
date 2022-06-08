@@ -5,6 +5,8 @@
 #include "esp_bt_device.h"
 #include"esp_gap_bt_api.h"
 #include "esp_err.h"
+// #include "fonts/SystemFont5x7.h"
+#include "fonts/Arial_black_16.h"
 
 BTSerial SerialBT;
 
@@ -41,7 +43,11 @@ void IRAM_ATTR triggerScan()
   // Serial.println("Scan");
   dmd.scanDisplayBySPI();
 }
-
+char Str[50] = "CEEC";
+char Str_Len = 4;
+long start;
+char Top[] = "CEEC";
+char Mid[] = "Congrat";
 
 void setup()
 {
@@ -68,35 +74,41 @@ void setup()
   timerAlarmWrite(timer, 200, true);
 
   // timerAlarmEnable(timer);
+  start = millis();
+  dmd.selectFont(Arial_Black_16);
+  dmd.drawMarquee(Str,Str_Len+1,32,32);
 
+  dmd.drawString(12,0, Top, sizeof(Top),GRAPHICS_NORMAL);
+  dmd.drawString(0,16, Mid, sizeof(Mid),GRAPHICS_NORMAL);
   dmd.clearScreen( true ); 
-
 }
 
 void loop()
 {
-  uint8_t* Rcv = nullptr;
   if(BT_isConnected)
   {
-    Rcv = SerialBT.Read_CMD();
-  }
-  
-  if(Rcv != nullptr)
-  {
-    dmd.clearScreen( true ); 
-    uint8_t size = sizeof(Rcv);
-    for(int i = 0; i < Len; i++)
+    if(SerialBT.available() > 0)
     {
-      char buff[50];
-      sprintf(buff, "%.2x ", Rcv[i]);
-      // SerialBT.print(buff);
-      Serial.print(buff);
-      WriteLine(Rcv[i], i); 
-    }
-    Serial.println();
-    // SerialBT.println();
+      Str_Len =  SerialBT.readBytesUntil('\n', Str, 49);
+      Str[Str_Len] = 0;
+      dmd.drawMarquee(Str,Str_Len+1,63,32);
+      dmd.drawString(12,0, Top, sizeof(Top),GRAPHICS_NORMAL);
+      dmd.drawString(0,16, Mid, sizeof(Mid),GRAPHICS_NORMAL);
+      Serial.printf("Str %s Len %d \r\n", Str, Str_Len);
+    };
   }
-
+  if(millis() - start > 30)
+  {
+    uint8_t ret;
+    ret = dmd.stepMarquee(-1,0);
+    dmd.drawString(12,0, Top, sizeof(Top),GRAPHICS_NORMAL);
+    dmd.drawString(0,16, Mid, sizeof(Mid),GRAPHICS_NORMAL);
+    start = millis();
+    if(ret)
+    {
+      dmd.drawMarquee(Str,Str_Len+1,63,32);
+    }
+  }
 }
 
 void Draw_Box(uint8_t PosX, uint8_t PosY)

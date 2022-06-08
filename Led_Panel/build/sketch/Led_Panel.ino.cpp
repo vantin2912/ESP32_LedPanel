@@ -7,6 +7,8 @@
 #include "esp_bt_device.h"
 #include"esp_gap_bt_api.h"
 #include "esp_err.h"
+// #include "fonts/SystemFont5x7.h"
+#include "fonts/Arial_black_16.h"
 
 BTSerial SerialBT;
 
@@ -38,31 +40,35 @@ bool BT_isConnected = false;
 
 void DMD_setBrightness(uint8_t percent);
 
-#line 46 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 52 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void setup();
-#line 76 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 86 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void loop();
-#line 102 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 114 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void Draw_Box(uint8_t PosX, uint8_t PosY);
-#line 106 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 118 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void WriteLine(uint8_t val, uint8_t Line);
-#line 123 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 135 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void BT_Callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param);
-#line 140 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 152 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 bool initBluetooth();
-#line 158 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 170 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void BT_Deinit();
-#line 165 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 177 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 char * bda2str(const uint8_t* bda, char *str, size_t size);
-#line 175 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 187 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void BT_RemovePaired();
-#line 39 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
+#line 41 "d:\\Project\\LedPanel\\ESP32_LedPanel\\Led_Panel\\Led_Panel.ino"
 void IRAM_ATTR triggerScan()
 {
   // Serial.println("Scan");
   dmd.scanDisplayBySPI();
 }
-
+char Str[50] = "CEEC";
+char Str_Len = 4;
+long start;
+char Top[] = "CEEC";
+char Mid[] = "Congrat";
 
 void setup()
 {
@@ -89,35 +95,41 @@ void setup()
   timerAlarmWrite(timer, 200, true);
 
   // timerAlarmEnable(timer);
+  start = millis();
+  dmd.selectFont(Arial_Black_16);
+  dmd.drawMarquee(Str,Str_Len+1,32,32);
 
+  dmd.drawString(12,0, Top, sizeof(Top),GRAPHICS_NORMAL);
+  dmd.drawString(0,16, Mid, sizeof(Mid),GRAPHICS_NORMAL);
   dmd.clearScreen( true ); 
-
 }
 
 void loop()
 {
-  uint8_t* Rcv = nullptr;
   if(BT_isConnected)
   {
-    Rcv = SerialBT.Read_CMD();
-  }
-  
-  if(Rcv != nullptr)
-  {
-    dmd.clearScreen( true ); 
-    uint8_t size = sizeof(Rcv);
-    for(int i = 0; i < Len; i++)
+    if(SerialBT.available() > 0)
     {
-      char buff[50];
-      sprintf(buff, "%.2x ", Rcv[i]);
-      // SerialBT.print(buff);
-      Serial.print(buff);
-      WriteLine(Rcv[i], i); 
-    }
-    Serial.println();
-    // SerialBT.println();
+      Str_Len =  SerialBT.readBytesUntil('\n', Str, 49);
+      Str[Str_Len] = 0;
+      dmd.drawMarquee(Str,Str_Len+1,63,32);
+      dmd.drawString(12,0, Top, sizeof(Top),GRAPHICS_NORMAL);
+      dmd.drawString(0,16, Mid, sizeof(Mid),GRAPHICS_NORMAL);
+      Serial.printf("Str %s Len %d \r\n", Str, Str_Len);
+    };
   }
-
+  if(millis() - start > 30)
+  {
+    uint8_t ret;
+    ret = dmd.stepMarquee(-1,0);
+    dmd.drawString(12,0, Top, sizeof(Top),GRAPHICS_NORMAL);
+    dmd.drawString(0,16, Mid, sizeof(Mid),GRAPHICS_NORMAL);
+    start = millis();
+    if(ret)
+    {
+      dmd.drawMarquee(Str,Str_Len+1,63,32);
+    }
+  }
 }
 
 void Draw_Box(uint8_t PosX, uint8_t PosY)
